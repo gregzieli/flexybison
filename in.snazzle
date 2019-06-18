@@ -1,0 +1,10 @@
+int1:=2 int2:=(-2 + 56)
+userint:=readint
+len:=length("somestring")
+pos:=position("otherstring","w")
+complex:=position(concatenate("a", "b"), substring("abcd", 2, 5))
+someintvar1:=2; awdawd:=256
+somestringvar:="NEXT will throw"
+
+
+print(someintvar + length(somestringvar))
