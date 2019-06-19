@@ -111,6 +111,6 @@ int main(int argc, char** argv) {
 }
 
 void yyerror(const char *s) {
-  cout << "Validation failed on line " << line_num << ". " << s << endl;
+  cerr << "Validation failed on line " << line_num << "." << endl;
   exit(-1);
 }
