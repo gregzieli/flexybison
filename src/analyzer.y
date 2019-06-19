@@ -96,9 +96,9 @@ bool_expr:
     ;
 %%
 
-int main(int, char**) {
+int main(int argc, char** argv) {
   // open a file handle to a particular file:
-  FILE *myfile = fopen("code", "r");
+  FILE *myfile = fopen(argv[1], "r");
   // make sure it is valid:
   if (!myfile) {
     cout << "Can't open file!" << endl;

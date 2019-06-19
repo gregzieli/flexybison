@@ -1,7 +1,7 @@
 %{
   #include <cstdio>
   #include <iostream>
-  #include "task.tab.h"
+  #include "analyzer.tab.h"
   using namespace std;
   int line_num = 1;
 %}
