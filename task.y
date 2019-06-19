@@ -23,7 +23,7 @@
 %token FUNC_EXIT // BEGIN END
 %token BOOL_TRUE BOOL_FALSE
 %token IF THEN ELSE
-//%token WHILE DO
+%token WHILE DO
 
 // define the "terminal symbol" token types I'm going to use (in CAPS
 // by convention), and associate each with a field of the union:
@@ -50,9 +50,14 @@ if_stat:
     IF bool_expr THEN simple_instr
     | IF bool_expr THEN simple_instr ELSE simple_instr
     ;
+while_stat:
+    WHILE bool_expr DO simple_instr
+    | DO simple_instr WHILE bool_expr
+    ;
 simple_instr:
     assign_stat
     | if_stat
+    | while_stat
     | FUNC_EXIT { cout << "exiting... "; }
     ;
 num_op:

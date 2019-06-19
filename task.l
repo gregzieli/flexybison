@@ -32,6 +32,8 @@ substring                     return FUNC_SUBSTR;
 if                            return IF;
 then                          return THEN;
 else                          return ELSE;
+while                         return WHILE;
+do                            return DO;
 exit                          return FUNC_EXIT;
 -?[0-9]+                      { yylval.ival = atoi(yytext); return NUM; }
 \"[a-zA-Z0-9 ,\.]+\"          { yylval.sval = strdup(yytext); return STRING; }
