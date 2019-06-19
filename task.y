@@ -1,28 +1,28 @@
 %{
-  #include <cstdio>
-  #include <iostream>
-  using namespace std;
+    #include <cstdio>
+    #include <iostream>
+    using namespace std;
 
-  // stuff from flex that bison needs to know about:
-  extern int yylex();
-  extern int yyparse();
-  extern FILE *yyin;
- 
-  void yyerror(const char *s);
+    // stuff from flex that bison needs to know about:
+    extern int yylex();
+    extern int yyparse();
+    extern FILE *yyin;
+    extern int line_num;
+    void yyerror(const char *s);
 %}
 
 %union {
-  int ival;
-  char *sval;
+    int ival;
+    char *sval;
 }
 
 // define the constant-string tokens:
 %token ASSIGN SEMICOLON L_BRACKET R_BRACKET COMMA 
 %token NOT AND OR PLUS MINUS MULTIPLY DIVIDE MODULO
 %token FUNC_READINT FUNC_READSTR FUNC_LENGTH FUNC_POS FUNC_CONC FUNC_SUBSTR //FUNC_PRINT
-//%token BEGIN END EXIT 
+%token FUNC_EXIT // BEGIN END
 %token BOOL_TRUE BOOL_FALSE
-//%token IF THEN ELSE TRUE FALSE
+%token IF THEN ELSE
 //%token WHILE DO
 
 // define the "terminal symbol" token types I'm going to use (in CAPS
@@ -42,17 +42,18 @@ instr:
     instr SEMICOLON simple_instr
     | simple_instr
     ;
-simple_instr:
-    simple_instr assign_stat
-    | assign_stat
-    ;
 assign_stat:
-    IDENT ASSIGN num_expr {
-        cout << " assigned to int variable " << $1 << endl; free($1);
-    }
-    | IDENT ASSIGN str_expr { 
-        cout << " assigned to string variable " << $1 << endl; free($1);
-    }
+    IDENT ASSIGN num_expr { cout << " assigned to int variable " << $1 << endl; free($1); }
+    | IDENT ASSIGN str_expr {  cout << " assigned to string variable " << $1 << endl; free($1); }
+    ;
+if_stat:
+    IF bool_expr THEN simple_instr
+    | IF bool_expr THEN simple_instr ELSE simple_instr
+    ;
+simple_instr:
+    assign_stat
+    | if_stat
+    | FUNC_EXIT { cout << "exiting... "; }
     ;
 num_op:
     PLUS | MINUS | MULTIPLY | DIVIDE | MODULO
@@ -70,18 +71,18 @@ num_expr:
     | FUNC_POS L_BRACKET str_expr COMMA str_expr R_BRACKET
     ;
 str_expr:
-    STRING {cout << $1; free($1); }
+    STRING { cout << $1; free($1); }
     | IDENT
     | FUNC_READSTR
     | FUNC_CONC L_BRACKET str_expr COMMA str_expr R_BRACKET
     | FUNC_SUBSTR L_BRACKET str_expr COMMA num_expr COMMA num_expr R_BRACKET
     ;
 bool_expr:
-    BOOL_FALSE { cout << "false"; }
-    | BOOL_TRUE { cout << "true"; }
+    BOOL_FALSE
+    | BOOL_TRUE
     | L_BRACKET bool_expr R_BRACKET
     | NOT bool_expr
-    | bool_expr bool_op bool_expr
+    | bool_expr bool_op bool_expr 
     | num_expr NUM_REL num_expr
     | str_expr STR_REL str_expr
     ;
@@ -102,7 +103,7 @@ int main(int, char**) {
 }
 
 void yyerror(const char *s) {
-  cout << "Parse error. Message: " << s << endl;
+  cout << "EEK, parse error on line " << line_num << "!  Message: " << s << endl;
   // might as well halt now:
   exit(-1);
 }

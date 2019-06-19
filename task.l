@@ -1,12 +1,13 @@
 %{
   #include <cstdio>
-
-  #include "task.tab.h"  // to get the token types from Bison
-
+  #include <iostream>
+  #include "task.tab.h"
+  using namespace std;
+  int line_num = 1;
 %}
 %option noyywrap
 %%
-[ \t\n]                       ;
+[ \t]                         ;
 :=                            return ASSIGN;
 ;                             return SEMICOLON;
 "("                           return L_BRACKET;
@@ -28,9 +29,14 @@ length                        return FUNC_LENGTH;
 position                      return FUNC_POS;
 concatenate                   return FUNC_CONC;
 substring                     return FUNC_SUBSTR;
+if                            return IF;
+then                          return THEN;
+else                          return ELSE;
+exit                          return FUNC_EXIT;
 -?[0-9]+                      { yylval.ival = atoi(yytext); return NUM; }
 \"[a-zA-Z0-9 ,\.]+\"          { yylval.sval = strdup(yytext); return STRING; }
 [a-zA-Z][a-zA-Z0-9_]*         { yylval.sval = strdup(yytext); return IDENT; }
-("="|"<"|"<="|">"|">="|"<>")? { yylval.sval = strdup(yytext); return NUM_REL; }
-("=="|"!=")?                  { yylval.sval = strdup(yytext); return STR_REL; }
+(=|<|<=|>|>=|<>)?             { yylval.sval = strdup(yytext); return NUM_REL; }
+(==|!=)?                      { yylval.sval = strdup(yytext); return STR_REL; }
+\n                            { ++line_num; cout << "Parsing line " << line_num << endl; }
 %%

@@ -1,10 +1,17 @@
-int1:=2 int2:=(-2 + 56)
+if true then exit;
 userint:=readint
 len:=length("somestring")
 pos:=position("otherstring","w")
 complex:=position(concatenate("a", "b"), substring("abcd", 2, 5))
 someintvar1:=2; awdawd:=256
-somestringvar:="NEXT will throw"
+if true then exit
+somestringvar:="NEXT should not throw"
+if false then exit else exit
+if 2 > 0 
+then if not true then exit else 
+    if "w" == "w" then dawda:=123
+else foo:="w2"
+
 
 
 print(someintvar + length(somestringvar))
