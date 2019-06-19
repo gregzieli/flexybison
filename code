@@ -1,3 +1,15 @@
+stringVar1:="hello";
+stringVar2:="world";
+
+length1:=length(stringVar1);
+length2:=length("hello");
+
+concat1:= concatenate("hello", " world");
+concat2:= concatenate(stringVar1, stringVar2);
+
+
+print(concatenate(stringVar1, stringVar2))
+intVar1:=1;
 if true then exit;
 userint:=readint
 len:=length("somestring")
@@ -27,3 +39,12 @@ end
 
 
 print(someintvar + length(somestringvar))
+
+
+print(2 + 5);
+print(2 * 5);
+print(2 - 5);
+print(10 / 2);
+print(10 % 2);
+
+exit
