@@ -47,4 +47,10 @@ print(2 - 5);
 print(10 / 2);
 print(10 % 2);
 
+someInt:=9;
+print(someInt);
+
+someString:="Halo";
+print(someString);
+
 exit

@@ -3,6 +3,7 @@
     #include <iostream>
     #include <string>
     #include <cstring>
+    #include <iterator> 
     #include <map>
     
     using namespace std;
@@ -16,12 +17,12 @@
 
 
 
-    map<char*, int> numVariables;
-    map<char*, char*> stringVariables;
-    void assignString(char* name, char* value);
-    void assignInt(char* name, int value);
-    int getInt(char* name);
-    char* getString(char* name);
+    map<string, int> numVariables;
+    map<string, char*> stringVariables;
+    void assignString(string name, char* value);
+    void assignInt(string name, int value);
+    int getInt(string name);
+    char* getString(string name);
 
     int getLength(string name);
     char* concat(string v1, string v2);
@@ -61,8 +62,8 @@ instr:
     | simple_instr
     ;
 assign_stat:
-    IDENT ASSIGN num_expr { assignInt($1, $3); }
-    | IDENT ASSIGN str_expr { assignString($1, $3); }
+    IDENT ASSIGN num_expr                                                       { assignInt($1, $3); }
+    | IDENT ASSIGN str_expr                                                     { assignString($1, $3); }
     ;
 if_stat:
     IF bool_expr THEN simple_instr
@@ -86,7 +87,7 @@ simple_instr:
     ;
 num_expr:
     NUM                                                                         { $$ = $1; }
-    | IDENT
+    | IDENT                                                                     { $$ = getInt($1); }
     | FUNC_READINT
     | num_expr PLUS num_expr                                                    { $$ = $1 + $3; }
     | num_expr MINUS num_expr                                                   { $$ = $1 - $3; }
@@ -135,24 +136,27 @@ void yyerror(const char *s) {
   exit(-1);
 }
 
-void assignString(char* name, char* value) {
-    stringVariables.insert(pair<char*, char*>(name, value) ); 
+void assignString(string name, char* value) {
+    stringVariables.insert(pair<string, char*>(name, value) ); 
     cout << "Assigned " << value << " to " << name << endl;
 }
 
-void assignInt(char* name, int value) {
-    numVariables.insert(pair<char*, int>(name, value) ); 
+void assignInt(string name, int value) {
+    numVariables.insert(pair<string, int>(name, value) ); 
     cout << "Assigned " << value << " to " << name << endl;
 }
 
-int getInt(char* name) {
+int getInt(string name) {
     int value = numVariables.find(name)->second; 
     cout << "Extracted " << value << " from " << name << endl;
+
+    return value;
 }
 
-char* getString(char* name) {
+char* getString(string name) {
     char* value = stringVariables.find(name)->second; 
     cout << "Extracted " << value << " from " << name << endl;
+    return value;
 }
 
 int getLength(string input) {
