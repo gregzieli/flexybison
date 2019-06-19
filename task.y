@@ -12,11 +12,10 @@
 %}
 
 %union {
-    int ival;
-    char *sval;
+    int number;
+    char* text;
 }
 
-// define the constant-string tokens:
 %token ASSIGN SEMICOLON L_BRACKET R_BRACKET COMMA 
 %token NOT AND OR PLUS MINUS MULTIPLY DIVIDE MODULO
 %token FUNC_READINT FUNC_READSTR FUNC_LENGTH FUNC_POS FUNC_CONC FUNC_SUBSTR FUNC_PRINT
@@ -25,17 +24,15 @@
 %token IF THEN ELSE
 %token WHILE DO
 
-// define the "terminal symbol" token types I'm going to use (in CAPS
-// by convention), and associate each with a field of the union:
-%token <ival> NUM
-%token <sval> IDENT
-%token <sval> STRING
-%token <sval> NUM_REL
-%token <sval> STR_REL
+%token <number> NUM
+%token <text> IDENT
+%token <text> STRING
+%token <text> NUM_REL
+%token <text> STR_REL
 
 %%
 program:
-    program instr
+    program instr 
     | instr
     ;
 instr:
@@ -101,20 +98,19 @@ bool_expr:
 
 int main(int, char**) {
   // open a file handle to a particular file:
-  FILE *myfile = fopen("in.snazzle", "r");
+  FILE *myfile = fopen("code", "r");
   // make sure it is valid:
   if (!myfile) {
-    cout << "I can't open a.snazzle.file!" << endl;
+    cout << "Can't open file!" << endl;
     return -1;
   }
-  // Set flex to read from it instead of defaulting to STDIN:
   yyin = myfile;
-  // Parse through the input:
+  cout << "Parsing line 1" << endl;
   yyparse();
+  cout << "Validation succeeded." << endl;
 }
 
 void yyerror(const char *s) {
-  cout << "EEK, parse error on line " << line_num << "!  Message: " << s << endl;
-  // might as well halt now:
+  cout << "Validation failed on line " << line_num << ". " << s << endl;
   exit(-1);
 }
