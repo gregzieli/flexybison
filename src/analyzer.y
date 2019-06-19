@@ -15,15 +15,12 @@
     extern int line_num;
     void yyerror(const char *s);
 
-
-
     map<string, int> numVariables;
-    map<string, char*> stringVariables;
-    void assignString(string name, char* value);
+    map<string, string> varTypes;
+    void assignType(string name, string type);
+    void verifyType(string name, string type);
     void assignInt(string name, int value);
     int getInt(string name);
-    char* getString(string name);
-
     int getLength(string name);
     char* concat(string v1, string v2);
 %}
@@ -62,8 +59,8 @@ instr:
     | simple_instr
     ;
 assign_stat:
-    IDENT ASSIGN num_expr                                                       { assignInt($1, $3); }
-    | IDENT ASSIGN str_expr                                                     { assignString($1, $3); }
+    IDENT ASSIGN num_expr                                                       { assignInt($1, $3); assignType($1, "int"); }
+    | IDENT ASSIGN str_expr                                                     { assignType($1, "string"); }
     ;
 if_stat:
     IF bool_expr THEN simple_instr
@@ -83,12 +80,12 @@ simple_instr:
     | while_stat
     | BEGIN_CLAUSE instr END_CLAUSE
     | output_stat
-    | FUNC_EXIT
+    | FUNC_EXIT                                                                 { cout << "Exiting..." << endl; exit(-1); }
     ;
 num_expr:
     NUM                                                                         { $$ = $1; }
-    | IDENT                                                                     { $$ = getInt($1); }
-    | FUNC_READINT
+    | IDENT                                                                     { $$ = getInt($1); verifyType($1, "int"); }
+    | FUNC_READINT                                                              { cin >> $$;  }
     | num_expr PLUS num_expr                                                    { $$ = $1 + $3; }
     | num_expr MINUS num_expr                                                   { $$ = $1 - $3; }
     | num_expr MULTIPLY num_expr                                                { $$ = $1 * $3; }
@@ -100,8 +97,8 @@ num_expr:
     ;
 str_expr:
     STRING                                                                      { $$ = $1; }
-    | IDENT 
-    | FUNC_READSTR
+    | IDENT                                                                     { verifyType($1, "string"); }
+    | FUNC_READSTR                                                              { cin >> $$; }
     | FUNC_CONC L_BRACKET str_expr COMMA str_expr R_BRACKET                     { $$ = concat($3, $5); }
     | FUNC_SUBSTR L_BRACKET str_expr COMMA num_expr COMMA num_expr R_BRACKET
     ;
@@ -126,7 +123,7 @@ int main(int argc, char** argv) {
     return -1;
   }
   yyin = myfile;
-  cout << "Parsing line 1" << endl;
+  cout << "1: ";
   yyparse();
   cout << "Validation succeeded." << endl;
 }
@@ -136,25 +133,16 @@ void yyerror(const char *s) {
   exit(-1);
 }
 
-void assignString(string name, char* value) {
-    stringVariables.insert(pair<string, char*>(name, value) ); 
-    cout << "Assigned " << value << " to " << name << endl;
-}
-
 void assignInt(string name, int value) {
     numVariables.insert(pair<string, int>(name, value) ); 
     cout << "Assigned " << value << " to " << name << endl;
 }
 
 int getInt(string name) {
+    if (numVariables.count(name) == 0) {
+        numVariables.insert(pair<string, int>(name, 0) );
+    }
     int value = numVariables.find(name)->second; 
-    cout << "Extracted " << value << " from " << name << endl;
-
-    return value;
-}
-
-char* getString(string name) {
-    char* value = stringVariables.find(name)->second; 
     cout << "Extracted " << value << " from " << name << endl;
     return value;
 }
@@ -173,4 +161,19 @@ char* concat(string v1, string v2) {
 
     cout << "Concat " << v1 << v2 << " = " << writable << endl;
     return writable;
+}
+
+void assignType(string name, string type) {
+    varTypes.insert(pair<string, string>(name, type) ); 
+    cout << "Assigned type " << type << " to " << name << endl;
+}
+
+void verifyType(string name, string type) {
+    if (varTypes.count(name) == 0) {
+        varTypes.insert(pair<string, string>(name, type) );
+    }
+    string value = varTypes.find(name)->second; 
+    if (value != type) {
+        cout << "Type mismatch for " << name << ". Declared as " << value << " now used as " << type  << endl;
+    }
 }

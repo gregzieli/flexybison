@@ -39,9 +39,9 @@ do                            return DO;
 begin                         return BEGIN_CLAUSE;
 end                           return END_CLAUSE;
 -?[0-9]+                      { yylval.number = atoi(yytext); return NUM; }
-\"[a-zA-Z0-9 ,\.]+\"          { yylval.text = strdup(yytext); return STRING; }
+\"[a-zA-Z0-9 ,\.:\+=\?]*\"         { yylval.text = strdup(yytext); return STRING; }
 [a-zA-Z][a-zA-Z0-9_]*         { yylval.text = strdup(yytext); return IDENT; }
 (=|<|<=|>|>=|<>)?             { yylval.text = strdup(yytext); return NUM_REL; }
 (==|!=)?                      { yylval.text = strdup(yytext); return STR_REL; }
-\n                            { ++line_num; cout << "Parsing line " << line_num << endl; }
+\n                            { ++line_num; cout << line_num << ": "; }
 %%

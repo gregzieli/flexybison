@@ -1,3 +1,29 @@
+print(2 + 5);
+print(2 * 5);
+print(2 - 5);
+print(10 / 2);
+print(10 % 2);
+
+someInt:=9;
+print(someInt);
+
+
+print(concatenate("Hello ", someInt));
+
+
+
+someString:="Halo";
+print(someString);
+
+
+
+print("Enter a number: ");
+userint:=readint;
+print(userint);
+print("")
+print("2 + x = ? Enter x.");
+print(2 + readint);
+
 stringVar1:="hello";
 stringVar2:="world";
 
@@ -10,47 +36,44 @@ concat2:= concatenate(stringVar1, stringVar2);
 
 print(concatenate(stringVar1, stringVar2))
 intVar1:=1;
-if true then exit;
-userint:=readint
 len:=length("somestring")
 pos:=position("otherstring","w")
 complex:=position(concatenate("a", "b"), substring("abcd", 2, 5))
 someintvar1:=2; awdawd:=256
-if true then exit
 somestringvar:="NEXT should not throw"
-if false then exit else exit
+
+
+
+print(someintvar1 + length(somestringvar))
+
+
+
+
+if true then dawda:=123;
+
 if 2 > 0 
-then if not true then exit else 
+then if not true then gsseg:=1231213 else 
     if "w" == "w" then dawda:=123
 else foo:="w2"
 
-while foo <> boo do exit
-do if true then exit else fooo:=123 while 3 = 2
+qwerty:=1;
+ytrewq:=2;
 
+while qwerty <> ytrewq do print("HELLO")
+do if true then print("HELLO") else fooo:=123 while 3 = 2
+
+a:="a";
+b:="b";
+d:=1;
+r:=2;
 while not (a != b and d <> r and 3 >= 4) 
 do 
 begin
 varfoo:=123; fovar:="aowiufh"; 
 if 2 > 0 
-then if not true then exit else 
+then if not true then print("o.O") else 
     if "w" == "w" then dawda:=123
 else foo:="w2"
 end
 
-
-print(someintvar + length(somestringvar))
-
-
-print(2 + 5);
-print(2 * 5);
-print(2 - 5);
-print(10 / 2);
-print(10 % 2);
-
-someInt:=9;
-print(someInt);
-
-someString:="Halo";
-print(someString);
-
-exit
+print(unknown)
