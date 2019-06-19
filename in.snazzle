@@ -12,7 +12,18 @@ then if not true then exit else
     if "w" == "w" then dawda:=123
 else foo:="w2"
 
-while false do exit
+while foo <> boo do exit
 do if true then exit else fooo:=123 while 3 = 2
+
+while not (a != b and d <> r and 3 >= 4) 
+do 
+begin
+varfoo:=123; fovar:="aowiufh"; 
+if 2 > 0 
+then if not true then exit else 
+    if "w" == "w" then dawda:=123
+else foo:="w2"
+end
+
 
 print(someintvar + length(somestringvar))

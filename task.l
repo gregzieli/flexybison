@@ -29,12 +29,15 @@ length                        return FUNC_LENGTH;
 position                      return FUNC_POS;
 concatenate                   return FUNC_CONC;
 substring                     return FUNC_SUBSTR;
+print                         return FUNC_PRINT;
+exit                          return FUNC_EXIT;
 if                            return IF;
 then                          return THEN;
 else                          return ELSE;
 while                         return WHILE;
 do                            return DO;
-exit                          return FUNC_EXIT;
+begin                         return BEGIN_CLAUSE;
+end                           return END_CLAUSE;
 -?[0-9]+                      { yylval.ival = atoi(yytext); return NUM; }
 \"[a-zA-Z0-9 ,\.]+\"          { yylval.sval = strdup(yytext); return STRING; }
 [a-zA-Z][a-zA-Z0-9_]*         { yylval.sval = strdup(yytext); return IDENT; }
