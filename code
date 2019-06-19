@@ -77,3 +77,10 @@ else foo:="w2"
 end
 
 print(unknown)
+
+testytest:="hello world";
+hubabuba:=concatenate(testytest, testytest);
+testytestLength:=length(testytest);
+print(testytestLength)
+print(hubabuba)
+print(concatenate(hubabuba, hubabuba))

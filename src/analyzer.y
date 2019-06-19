@@ -16,11 +16,14 @@
     void yyerror(const char *s);
 
     map<string, int> numVariables;
+    map<string, string> stringVariables;
     map<string, string> varTypes;
     void assignType(string name, string type);
     void verifyType(string name, string type);
     void assignInt(string name, int value);
+    void assignString(string name, string value);
     int getInt(string name);
+    char* getString(string name);
     int getLength(string name);
     char* concat(string v1, string v2);
 %}
@@ -59,8 +62,8 @@ instr:
     | simple_instr
     ;
 assign_stat:
-    IDENT ASSIGN num_expr                                                       { assignInt($1, $3); assignType($1, "int"); }
-    | IDENT ASSIGN str_expr                                                     { assignType($1, "string"); }
+    IDENT ASSIGN num_expr                                                       { assignType($1, "int"); assignInt($1, $3); }
+    | IDENT ASSIGN str_expr                                                     { assignType($1, "string"); assignString($1, $3); }
     ;
 if_stat:
     IF bool_expr THEN simple_instr
@@ -97,7 +100,7 @@ num_expr:
     ;
 str_expr:
     STRING                                                                      { $$ = $1; }
-    | IDENT                                                                     { verifyType($1, "string"); }
+    | IDENT                                                                     { $$ = getString($1); verifyType($1, "string"); }
     | FUNC_READSTR                                                              { cin >> $$; }
     | FUNC_CONC L_BRACKET str_expr COMMA str_expr R_BRACKET                     { $$ = concat($3, $5); }
     | FUNC_SUBSTR L_BRACKET str_expr COMMA num_expr COMMA num_expr R_BRACKET
@@ -138,13 +141,31 @@ void assignInt(string name, int value) {
     cout << "Assigned " << value << " to " << name << endl;
 }
 
+void assignString(string name, string value) {
+    stringVariables.insert(pair<string, string>(name, value) ); 
+    cout << "Assigned " << value << " to " << name << endl;
+}
+
 int getInt(string name) {
     if (numVariables.count(name) == 0) {
         numVariables.insert(pair<string, int>(name, 0) );
     }
     int value = numVariables.find(name)->second; 
-    cout << "Extracted " << value << " from " << name << endl;
+    cout << "GetInt: Extracted " << value << " from " << name << endl;
     return value;
+}
+
+char* getString(string name) {
+    if (stringVariables.count(name) == 0) {
+        stringVariables.insert(pair<string, string>(name, "") );
+    }
+    string str = stringVariables.find(name)->second; 
+    char * writable = new char[str.size() + 1];
+    copy(str.begin(), str.end(), writable);
+    writable[str.size()] = '\0';
+    cout << "GetString: Extracted " << writable << " from " << name << endl;
+
+    return writable;
 }
 
 int getLength(string input) {
